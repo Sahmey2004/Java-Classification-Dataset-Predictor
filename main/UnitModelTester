@@ -1,0 +1,40 @@
+
+public class UnitModelTester {
+    
+    public static void main(String[] args) {
+        DatasetReader reader;
+        Matrix[] allData;
+        boolean isBinary;
+        
+       
+        reader = new DatasetReader();
+        allData = reader.getDatasets("genLinear");
+        //allData = reader.getDatasets("breast-cancer-wisconsin");
+        //allData = reader.getDatasets("titanic");
+        Matrix XTrain = allData[0];
+        Matrix YTrain = allData[1];
+        Matrix XTest = allData[2];
+        Matrix YTest = allData[3];
+        Matrix YPred;
+        
+        System.out.println("XTrain: " + XTrain.toPartialString(4));
+        System.out.println("YTrain: " + YTrain.toPartialString(4));
+        System.out.println("XTest: " + XTest.toPartialString(4));
+        System.out.println("YTest: " + YTest.toPartialString(4));
+        
+        UnitModel unit = new UnitModel();
+        
+        System.out.println("---------- fit ----------");
+        unit.fit(XTrain, YTrain); // fit on the training data
+        System.out.println("After fit, unit is:\n" + unit);
+        
+        System.out.println("---------- predict ----------");
+        YPred = unit.predict(XTest); // make predictions given the testing data inputs
+        System.out.println("The predictions are:" + YPred);
+        
+        System.out.println("---------- compare ----------");
+        unit.compare(YTest, YPred); // Will print the comparison of the correct testing data outputs with the predictions
+    }
+    
+}
+
