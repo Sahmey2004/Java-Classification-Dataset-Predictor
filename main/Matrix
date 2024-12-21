@@ -1,0 +1,197 @@
+
+import java.util.Random;
+
+public class Matrix {
+    
+    private double[][] vals;
+    
+    public String toString() {
+        String result = "";
+        
+        result += "{\n";
+        for(int r = 0; r < vals.length; r++) {
+            result += " {";
+            for(int c = 0; c < vals[0].length-1; c++) {
+                result += vals[r][c] + ", ";
+            }
+            result += vals[r][vals[0].length-1] + "}\n";
+        }
+        result += "}\n";
+        
+        return result;
+    }
+    
+    public Matrix ( final int Row, final int Col){
+        vals = new double[Row][Col];
+    }
+    public Matrix ( double[][] array ){
+     
+                 vals  = array  ;
+            
+    }
+    
+
+    public int getNumRows (){
+        return vals.length;
+    }
+    
+    public int getNumCols (){
+        return vals[0].length;
+    }
+    public double get ( int row, int col ){
+        
+        return vals[row][col];
+    }
+    
+    public boolean hasSameNumRowsAs ( Matrix other ){
+        if ( this.getNumRows() == other.getNumRows()){
+            return true;
+        }
+        else {
+            return false;
+        }
+        
+    }
+    
+    public boolean hasSameNumColsAs (Matrix other){
+        if( this.getNumCols() == other.getNumCols()){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    public double sumAll (){
+        double sum = 0.0;
+        for(int i = 0 ; i < vals.length ; i++){
+            for ( int j = 0 ; j < vals[0].length; j++){
+                sum += vals[i][j];
+            }
+        }
+        
+        return sum;
+    }
+    
+    public Matrix plusScalar (double x){
+        double[][] result = new double [vals.length][vals[0].length];
+        for(int i = 0 ; i < vals.length ; i++){
+            for ( int j = 0 ; j < vals[0].length; j++){
+                result [i][j] = this.vals[i][j] + x;
+            }
+        }
+        return new Matrix(result);
+    }
+    
+   public Matrix timesScalar (double x){
+        double[][] result = new double [vals.length][vals[0].length];
+        for(int i = 0 ; i < vals.length ; i++){
+            for ( int j = 0 ; j < vals[0].length; j++){
+                result [i][j] = this.vals[i][j] * x;
+            }
+        }
+        return new Matrix(result);
+    }
+    
+    public Matrix elementwisePlus ( Matrix other){
+        double [][] result = new double [vals.length][vals[0].length];
+        for(int i = 0 ; i < vals.length ; i++){
+            for ( int j = 0 ; j < vals[0].length; j++){
+                result [i][j] = this.vals[i][j]+ other.vals[i][j];
+            }
+        }
+    
+        return new Matrix (result);
+    }
+    
+    public Matrix transpose(){
+        double [][] result = new double[vals[0].length][vals.length];
+         for ( int i = 0; i < vals.length ; i++){
+             for ( int j = 0 ; j< vals[0].length ; j++){
+                 result [j][i] = this.vals[i][j];
+             }
+         }
+                
+            
+    
+        return new Matrix (result);
+    }
+    public Matrix sigmoid ( ){
+        double [][] result = new double [vals.length][vals[0].length];
+        for(int i = 0 ; i < vals.length ; i++){
+            for ( int j = 0 ; j < vals[0].length; j++){
+                result [i][j] = 1/(1+ Math.exp ( - this.vals[i][j] ));
+            }
+        }
+    
+        return new Matrix (result);
+    }
+    
+    public String toPartialString(int size) {
+        String result = "";
+        
+        result += "Shape: (" + getNumRows() + ", " + getNumCols() + ")\n";
+        
+        int rStop;
+        int cStop;
+        if (vals.length < size)
+            rStop = vals.length;
+        else
+            rStop = size;
+            
+        if (vals[0].length < size)
+            cStop = vals[0].length;
+        else
+            cStop = size;
+        
+        result += "{\n";
+        for(int r = 0; r < rStop; r++) {
+            result += " {";
+            for(int c = 0; c < cStop-1; c++) {
+                result += vals[r][c] + ", ";
+            }
+            result += vals[r][cStop-1];
+            
+            if (vals[0].length > size) 
+                result += ", ...";     
+                
+            
+            if (r == vals.length-1)
+                result += "}\n";
+            else
+                result += "},\n";
+        }
+        
+        if (rStop < vals.length) 
+            result += " ...\n";
+            
+        result += "}\n";
+        
+        return result;
+    }
+    
+    public Matrix matMult ( Matrix other ){
+        
+        
+        double [][] result = new double[this.vals.length][other.vals[0].length];
+        double sum;
+        try {
+         for ( int r = 0; r < result.length ; r++){
+             for ( int c = 0 ; c < result[0].length ; c++){
+                 sum = 0;
+                 for ( int i = 0 ;  i < this.vals[0].length ; i++){
+                     sum = sum + ( this.vals[r][i] * other.vals[i][c]);
+                 }
+                 result[r][c] = sum;
+             }
+         }
+        
+    }
+    catch ( IndexOutOfBoundsException e){
+        System.out.println("Error processing matrix.");
+    }
+    return new Matrix (result);
+    }
+    
+    
+}
